@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AppHotel - POO & Interface Gráfica</title>
+    <!-- Google Fonts & FontAwesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary-color: #4f46e5;
+            --primary-dark: #3730a3;
+            --accent-color: #818cf8;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #cbd5e1;
+            --radius: 12px;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Header e Navegação */
+        header {
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .navbar {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 0.75rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-muted);
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--primary-color);
+            background-color: rgba(79, 70, 229, 0.08);
+        }
+
+        /* Container Principal */
+        main {
+            flex: 1;
+            max-width: 1100px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 2.5rem 2rem;
+        }
+
+        .screen {
+            display: none;
+            animation: fadeIn 0.4s ease forwards;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Estilização do App Hotel */
+        .hotel-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            color: white;
+            padding: 2.5rem;
+            border-radius: var(--radius);
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 25px -5px rgba(79, 70, 229, 0.25);
+        }
+
+        .hotel-header h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .hotel-header p {
+            opacity: 0.9;
+            font-size: 1rem;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .card-panel {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 2rem;
+            border-radius: var(--radius);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
+        }
+
+        .card-panel h3 {
+            margin-bottom: 1.25rem;
+            color: var(--primary-dark);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.15rem;
+        }
+
+        .input-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .input-group label {
+            display: block;
+            font-weight: 500;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-main);
+        }
+
+        .input-group select, .input-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 0.95rem;
+            background-color: #fff;
+            color: var(--text-main);
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .input-group select:focus, .input-group input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+        }
+
+        .stepper-box {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #f1f5f9;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .stepper-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .stepper-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        .summary-box {
+            background: #f8fafc;
+            border: 1px dashed var(--primary-color);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-top: 1.5rem;
+        }
+
+        .summary-box h4 {
+            color: var(--primary-dark);
+            margin-bottom: 0.75rem;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .total-price {
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--primary-color);
+            margin-top: 1rem;
+            padding-top: 0.75rem;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .btn-submit {
+            display: block;
+            width: 100%;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.85rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-top: 1.5rem;
+            text-align: center;
+        }
+
+        .btn-submit:hover {
+            background: var(--primary-dark);
+        }
+
+        /* Nova Tela: Histórico / Suítes Cadastradas (Objeto List) */
+        .history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .history-card {
+            background: white;
+            border: 1px solid var(--border-color);
+            padding: 1.25rem;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Tela Sobre */
+        .about-container {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 3rem;
+            max-width: 650px;
+            margin: 0 auto;
+            text-align: center;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
+        }
+
+        .about-avatar {
+            width: 80px;
+            height: 80px;
+            background: rgba(79, 70, 229, 0.1);
+            color: var(--primary-color);
+            font-size: 2.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            margin: 0 auto 1.25rem auto;
+        }
+
+        .about-container h2 {
+            font-size: 1.6rem;
+            margin-bottom: 0.4rem;
+        }
+
+        .about-badge {
+            display: inline-block;
+            background: rgba(79, 70, 229, 0.1);
+            color: var(--primary-color);
+            padding: 0.3rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1.25rem;
+        }
+
+        .about-details {
+            text-align: left;
+            margin-top: 1.5rem;
+            border-top: 1px solid var(--border-color);
+            padding-top: 1.25rem;
+        }
+
+        .about-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.6rem 0;
+            border-bottom: 1px dashed var(--border-color);
+            font-size: 0.95rem;
+        }
+
+        .about-item span:first-child {
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .about-item span:last-child {
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        /* Rodapé */
+        footer {
+            text-align: center;
+            padding: 1.5rem;
+            background: var(--card-bg);
+            border-top: 1px solid var(--border-color);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Cabeçalho -->
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                <i class="fa-solid fa-hotel"></i> AppHotel - POO
+            </div>
+            <ul class="nav-links">
+                <li><a onclick="switchScreen('home')" id="nav-home" class="active">Reserva</a></li>
+                <li><a onclick="switchScreen('history')" id="nav-history">Histórico</a></li>
+                <li><a onclick="switchScreen('about')" id="nav-about">Sobre</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Conteúdo -->
+    <main>
+        <!-- Tela Principal (Reserva) -->
+        <section id="screen-home" class="screen active">
+            <div class="hotel-header">
+                <h1>Painel de Reservas (Agenda 14)</h1>
+                <p>Simulação orientada a objetos com validação de datas e gerenciamento de listas de hóspedes.</p>
+            </div>
+
+            <div class="form-grid">
+                <div class="card-panel">
+                    <h3><i class="fa-solid fa-sliders"></i> Dados da Hospedagem</h3>
+                    
+                    <div class="input-group">
+                        <label for="suiteSelect">Escolha a Suíte:</label>
+                        <select id="suiteSelect" onchange="calcularReserva()">
+                            <option value="180">Suíte Luxo (R$ 180,00 / dia)</option>
+                            <option value="280">Suíte Executiva (R$ 280,00 / dia)</option>
+                            <option value="450">Suíte Presidencial (R$ 450,00 / dia)</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="checkinDate">Data de Check-in:</label>
+                        <input type="date" id="checkinDate" onchange="validarDatas()">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="checkoutDate">Data de Check-out:</label>
+                        <input type="date" id="checkoutDate" onchange="validarDatas()">
+                    </div>
+
+                    <div class="input-group">
+                        <label>Quantidade de Hóspedes:</label>
+                        <div class="stepper-box">
+                            <span id="guestCount" style="font-weight: 600;">2</span>
+                            <div>
+                                <button class="stepper-btn" onclick="alterarHospedes(-1)">-</button>
+                                <button class="stepper-btn" onclick="alterarHospedes(1)">+</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="btn-submit" onclick="salvarReserva()"><i class="fa-solid fa-check"></i> Confirmar e Salvar</button>
+                </div>
+
+                <div class="card-panel">
+                    <h3><i class="fa-solid fa-receipt"></i> Resumo da Reserva</h3>
+                    <div class="summary-box">
+                        <h4>Detalhes Calculados</h4>
+                        <div class="summary-item">
+                            <span>Diárias:</span>
+                            <span id="lblDiarias">1 dia(s)</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>Hóspedes:</span>
+                            <span id="lblHospedes">2 pessoa(s)</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>Valor Diária:</span>
+                            <span id="lblValorDiaria">R$ 180,00</span>
+                        </div>
+                        <div class="total-price">
+                            <span>Valor Total:</span>
+                            <span id="lblTotal">R$ 180,00</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Nova Tela: Histórico (Simulando List<T>) -->
+        <section id="screen-history" class="screen">
+            <div class="hotel-header">
+                <h1>Histórico de Reservas</h1>
+                <p>Lista de objetos salvos dinamicamente na sessão atual.</p>
+            </div>
+            <div class="card-panel">
+                <h3><i class="fa-solid fa-list-check"></i> Reservas Registradas</h3>
+                <div id="historyList" class="history-list">
+                    <p style="color: var(--text-muted);">Nenhuma reserva registrada ainda.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tela Sobre -->
+        <section id="screen-about" class="screen">
+            <div class="about-container">
+                <div class="about-avatar">
+                    <i class="fa-solid fa-user-gear"></i>
+                </div>
+                <h2>Sobre o Desenvolvedor</h2>
+                <span class="about-badge">Módulo de Desenvolvimento de Sistemas</span>
+                <p>Atividade prática desenvolvida para consolidação dos conceitos de POO e validação de interface.</p>
+                
+                <div class="about-details">
+                    <div class="about-item">
+                        <span>Desenvolvedor(a):</span>
+                        <span>Nicolly Goes Bastos</span>
+                    </div>
+                    <div class="about-item">
+                        <span>Ano de Desenvolvimento:</span>
+                        <span>2026</span>
+                    </div>
+                    <div class="about-item">
+                        <span>Instituição:</span>
+                        <span>Centro Paula Souza (ETEC)</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Rodapé -->
+    <footer>
+        <p>© 2026 - Desenvolvido para fins educacionais.</p>
+    </footer>
+
+    <!-- Lógica JavaScript simulando POO e Listas -->
+    <script>
+        let hospedes = 2;
+        let listaReservas = []; // Equivalente a List<Reserva> em C#
+
+        function switchScreen(screenName) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-links a').forEach(l => l.classList.remove('active'));
+            
+            document.getElementById('screen-' + screenName).classList.add('active');
+            document.getElementById('nav-' + screenName).classList.add('active');
+        }
+
+        function alterarHospedes(valor) {
+            hospedes += valor;
+            if (hospedes < 1) hospedes = 1;
+            if (hospedes > 10) hospedes = 10;
+            document.getElementById('guestCount').innerText = hospedes;
+            calcularReserva();
+        }
+
+        function validarDatas() {
+            const checkin = document.getElementById('checkinDate').value;
+            const checkout = document.getElementById('checkoutDate').value;
+
+            if (checkin && checkout) {
+                const d1 = new Date(checkin);
+                const d2 = new Date(checkout);
+                if (d2 <= d1) {
+                    alert("A data de check-out deve ser posterior à data de check-in!");
+                    document.getElementById('checkoutDate').value = "";
+                }
+            }
+            calcularReserva();
+        }
+
+        function calcularReserva() {
+            const valorDiaria = parseFloat(document.getElementById('suiteSelect').value);
+            const checkin = document.getElementById('checkinDate').value;
+            const checkout = document.getElementById('checkoutDate').value;
+
+            let dias = 1;
+            if (checkin && checkout) {
+                const d1 = new Date(checkin);
+                const d2 = new Date(checkout);
+                const diffTime = d2 - d1;
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                if (diffDays > 0) dias = diffDays;
+            }
+
+            const total = valorDiaria * dias;
+
+            document.getElementById('lblDiarias').innerText = dias + ' dia(s)';
+            document.getElementById('lblHospedes').innerText = hospedes + ' pessoa(s)';
+            document.getElementById('lblValorDiaria').innerText = 'R$ ' + valorDiaria.toFixed(2).replace('.', ',');
+            document.getElementById('lblTotal').innerText = 'R$ ' + total.toFixed(2).replace('.', ',');
+
+            return { dias, hospedes, valorDiaria, total };
+        }
+
+        function salvarReserva() {
+            const dados = calcularReserva();
+            listaReservas.push(dados);
+            alert("Reserva confirmada e adicionada à lista de objetos com sucesso!");
+            atualizarHistorico();
+        }
+
+        function atualizarHistorico() {
+            const container = document.getElementById('historyList');
+            if (listaReservas.length === 0) {
+                container.innerHTML = '<p style="color: var(--text-muted);">Nenhuma reserva registrada ainda.</p>';
+                return;
+            }
+
+            container.innerHTML = '';
+            listaReservas.forEach((res, index) => {
+                container.innerHTML += `
+                    <div class="history-card">
+                        <div>
+                            <strong>Reserva #${index + 1}</strong><br>
+                            <small>${res.dias} diária(s) | ${res.hospedes} hóspede(s)</small>
+                        </div>
+                        <div style="font-weight: 600; color: var(--primary-color);">
+                            R$ ${res.total.toFixed(2).replace('.', ',')}
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        window.onload = function() {
+            const hoje = new Date();
+            const amanha = new Date();
+            amanha.setDate(hoje.getDate() + 1);
+
+            document.getElementById('checkinDate').valueAsDate = hoje;
+            document.getElementById('checkoutDate').valueAsDate = amanha;
+            calcularReserva();
+        };
+    </script>
+</body>
+</html>
